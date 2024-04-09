@@ -12,7 +12,7 @@ Example:
     api = pytolnet.TOLNetAPI()
     cldf = api.data_calendar('UAH')
     newest_data_id = cldf.index.values[0]
-    ds = api.to_xarray(newest_data_id)
+    ds = api.to_dataset(newest_data_id)
     print(ds.to_dataframe().reset_index().describe())
     #                                 time      altitude  derived_ozone
     # count                         174096  174096.00000   63538.000000
@@ -33,7 +33,8 @@ v0.1.0 : First release. Includes fix for boolean properties.
 
 class TOLNetAPI:
     def __init__(
-        self, token='anonymous', root='https://tolnet.larc.nasa.gov/api'
+        self, token='anonymous', cache='.',
+        root='https://tolnet.larc.nasa.gov/api'
     ):
         """
         Arguments
@@ -54,7 +55,7 @@ class TOLNetAPI:
             api = pytolnet.TOLNetAPI()
             cldf = api.data_calendar('UAH')
             newest_data_id = cldf.index.values[0]
-            ds = api.to_xarray(newest_data_id)
+            ds = api.to_dataset(newest_data_id)
             print(ds.to_dataframe().reset_index().describe())
             #                                 time      altitude  derived_ozone
             # count                         174096  174096.00000   63538.000000
@@ -71,6 +72,7 @@ class TOLNetAPI:
         self._root = root
         self.set_token(token)
         self._igdf = None
+        self._cache = cache
 
     def set_token(self, token=None):
         """
@@ -161,7 +163,7 @@ class TOLNetAPI:
         )
         return cldf.sort_values('start_data_date', ascending=ascending)
 
-    def to_xarray(self, id, cache='.', overwrite=False, product_type=4):
+    def to_dataset(self, id, cache=None, overwrite=False, product_type=4):
         """
         Acquire data from product_type and return it as an xarray.Dataset
 
@@ -191,11 +193,14 @@ class TOLNetAPI:
             raise IOError(f'Only supports product_type=4, got {product_type}')
         return ds
 
-    def get_product_type5(self, id, cache='.', overwrite=False):
+    def get_product_type5(self, id, cache=None, overwrite=False):
+        """
+        Product type 5 has the same format as 4, so this is a thin wrapper.
+        """
         opts = dict(id=id, cache=cache, overwrite=overwrite)
         return self.get_product_type4(**opts)
 
-    def get_product_type4(self, id, cache='.', overwrite=False):
+    def get_product_type4(self, id, cache=None, overwrite=False):
         """
         Acquire data from product_type=4 and return it as an xarray.Dataset
 
@@ -222,6 +227,8 @@ class TOLNetAPI:
         root = self._root
         headers = self._headers
         s = self._session
+        if cache is None:
+            cache = self._cache
 
         outpath = f'{cache}/{id}.nc'
         if not os.path.exists(outpath) or overwrite:

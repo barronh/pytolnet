@@ -16,7 +16,7 @@ Example:
     newest_data_id = cldf.index.values[0]
 
     # Retrieve data
-    ds = api.to_xarray(newest_data_id)
+    ds = api.to_dataset(newest_data_id)
 
     # Print statistics (including coordinates)
     print(ds.to_dataframe().reset_index().describe())

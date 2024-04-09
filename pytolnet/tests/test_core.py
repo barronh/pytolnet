@@ -20,7 +20,7 @@ def test_producttype4():
     api = _get_api()
     newest_data_id = 2115
     with tempfile.TemporaryDirectory() as td:
-        ds = api.to_xarray(newest_data_id, overwrite=True, cache=td)
+        ds = api.to_dataset(newest_data_id, overwrite=True, cache=td)
         sumdf = ds.to_dataframe().reset_index().describe()
         assert 'time' in sumdf.columns
         assert 'altitude' in sumdf.columns
@@ -35,7 +35,7 @@ def test_producttype5():
     api = _get_api()
     newest_data_id = 4658
     with tempfile.TemporaryDirectory() as td:
-        ds = api.to_xarray(newest_data_id, overwrite=True, cache=td)
+        ds = api.to_dataset(newest_data_id, overwrite=True, cache=td)
         sumdf = ds.to_dataframe().reset_index().describe()
         assert 'time' in sumdf.columns
         assert 'altitude' in sumdf.columns
@@ -51,6 +51,6 @@ def test_producttype8():
     newest_data_id = 4658
     with tempfile.TemporaryDirectory() as td:
         try:
-            api.to_xarray(newest_data_id, product_type=8, cache=td)
+            api.to_dataset(newest_data_id, product_type=8, cache=td)
         except IOError:
             pass
