@@ -154,6 +154,9 @@ class TOLNetAPI:
         caldf : pandas.DataFrame
             DataFrame of data by date
 
+        Example
+        -------
+
         .. code-block:: python
 
             import pytolnet

@@ -8,6 +8,7 @@ This example shows how to aquire TOLNet data from UAH and make a curtain plot.""
 # Initialize API and Find Data
 # ----------------------------
 
+# python -m pip install git+https://github.com/barronh/pytolnet.git
 import pytolnet
 
 api = pytolnet.TOLNetAPI()
