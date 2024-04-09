@@ -7,7 +7,8 @@ pytolnet User's Guide
 `pytolnet` is a python tool to work with TOLNet's API
 
 The key value of `pytolnet` is to provide a python interface that returns
-pandas and xarray.Dataset object. This should make working with the data
+pandas.DataFrame and xarray.Dataset objects. DataFrames and Dasasets have
+great built-in support for analytics and plotting. This should make analysis
 easy and *fun*.
 
 Getting Started

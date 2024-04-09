@@ -1,12 +1,20 @@
 __all__ = ['TOLNetAPI']
 __doc__ = """TOLNet API
+==========
 
 Utilities for retrieving and plotting TOLNet data.
 
-To Install:
+To Install
+----------
+
+.. code-block:: bash
+
     python -m pip install --user git+https://github.com/barronh/pytolnet.git
 
-Example:
+Example
+-------
+
+.. code-block:: python
 
     import pytolnet
     api = pytolnet.TOLNetAPI()
@@ -50,6 +58,8 @@ class TOLNetAPI:
 
         Example
         -------
+
+        .. code-block:: python
 
             import pytolnet
             api = pytolnet.TOLNetAPI()
@@ -143,6 +153,15 @@ class TOLNetAPI:
         -------
         caldf : pandas.DataFrame
             DataFrame of data by date
+
+        .. code-block:: python
+
+            import pytolnet
+            api = pytolnet.TOLNetAPI()
+            cldf = api.data_calendar('UAH')
+            print(cldf.columns)
+            # 'start_data_date', 'public', 'near_real_time', 'isAccessible'
+
         """
         from warnings import warn
         if igid is None:
@@ -183,6 +202,16 @@ class TOLNetAPI:
         -------
         ds : xarray.Dataset
             Dataset for file requested
+
+        Example
+        -------
+
+        .. code-block:: python
+
+            import pytolnet
+            api = pytolnet.TOLNetAPI()
+            ds = api.to_dataset(2115)
+
         """
         opts = dict(id=id, cache=cache, overwrite=overwrite)
         if product_type == 4:

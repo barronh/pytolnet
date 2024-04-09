@@ -5,6 +5,10 @@ Python utilities for reading and plotting TOLNet data.
 To Install:
     python -m pip install --user git+https://github.com/barronh/pytolnet.git
 
+Documentation:
+
+https://barronh.github.io/pytolnet
+
 Example:
 
     import pytolnet
