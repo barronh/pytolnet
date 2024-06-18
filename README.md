@@ -47,4 +47,4 @@ Example:
     qm.figure.savefig('pytolnet.png')
 
 
-[Output](pytolnet.png)
+![tolnet plot](pytolnet.png)
