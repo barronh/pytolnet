@@ -32,7 +32,7 @@ Example
     # max              2023-08-17 01:31:57      15.15000     100.000000
     # std                              NaN       4.29549      13.209246
 """
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 changelog = """
 v0.1.0 : First release. Includes fix for boolean properties.
@@ -81,7 +81,10 @@ class TOLNetAPI:
         self._session = requests.Session()
         self._root = root
         self.set_token(token)
-        self._igdf = None
+        self._instrument_groups_df = None
+        self._file_types_df = None
+        self._product_types_df = None
+        self._processing_types_df = None
         self._cache = cache
 
     def set_token(self, token=None):
@@ -123,11 +126,44 @@ class TOLNetAPI:
         Returns
         -------
         igdf : pandas.DataFrame
-            Instrument groups
+            Instrument groups dataframe
         """
-        if self._igdf is None:
-            self._igdf = self._get_meta('instruments/groups')
-        return self._igdf
+        if self._instrument_groups_df is None:
+            self._instrument_groups_df = self._get_meta('instruments/groups')
+        return self._instrument_groups_df
+
+    def product_types(self):
+        """
+        Returns
+        -------
+        prdf : pandas.DataFrame
+            Product types dataframe
+        """
+        if self._product_types_df is None:
+            self._product_types_df = self._get_meta('data/product_types')
+        return self._product_types_df
+
+    def file_types(self):
+        """
+        Returns
+        -------
+        fldf : pandas.DataFrame
+            File types dataframe
+        """
+        if self._file_types_df is None:
+            self._file_types_df = self._get_meta('data/file_types')
+        return self._file_types_df
+
+    def processing_types(self):
+        """
+        Returns
+        -------
+        ptdf : pandas.DataFrame
+            Processing types dataframe
+        """
+        if self._processing_types_df is None:
+            self._processing_types_df = self._get_meta('data/processing_types')
+        return self._processing_types_df
 
     def data_calendar(
         self, igname=None, igid=None, product_type='4', processing_type='1,2',
@@ -141,13 +177,17 @@ class TOLNetAPI:
         igname : str or None
             Instruments Group name (see instruments_group)
         igid : int or None
-            Instruments Group id (see instruments_group); supersedes igname
+            Instruments Group id (see instruments_group); supersedes igname.
+            If igname and igid are None, returns calendar from all instruments
         product_type : int or str
-            Defaults to 4, which is the supported data to be read.
+            Defaults to 4 (HIRES), which is the supported data to be read.
+            Other formats (5=CALVAL; 6=CLIM) are not tested. Remaining formats
+            (7=gridded; 8=legacy) not likely to work.
         processing_type : int or str
-            Defaults to '1,2'
+            Defaults to '1,2' (central,inhouse). Unprocessed (3) is not yet
+            supported.
         file_type : int or str
-            Defaults to '1'
+            Defaults to '1' (HDF GEOMS). See file_types for other options.
 
         Returns
         -------
@@ -167,16 +207,34 @@ class TOLNetAPI:
 
         """
         from warnings import warn
+        import pandas as pd
+
         if igid is None:
             igdf = self.instruments_groups()
-            sigdf = igdf.query(f'instrument_group_name == "{igname}"')
-            if sigdf.shape[0] == 0:
-                ignames = igdf['instrument_group_name'].unique()
-                raise KeyError(f'igname must be in {ignames}; got {igname}')
-            igids = sigdf.index.values
-            igid = igids[0]
-            if sigdf.shape[0] > 1:
-                warn(f'igname is not unique {igids}; defaulting to {igid}')
+            if igname is None:
+                cldfs = []
+                opts = dict(
+                    product_type=product_type, processing_type=processing_type,
+                    file_type=file_type, ascending=ascending
+                )
+                for igid, row in igdf.iterrows():
+                    try:
+                        cldfs.append(self.data_calendar(igid=igid, **opts))
+                    except Exception as e:
+                        instrument_group_name = row['instrument_group_name']
+                        msg = f'igid={igid} failed ({instrument_group_name})'
+                        msg += f'; {e}'
+                        warn(msg)
+                return pd.concat(cldfs)
+            else:
+                sigdf = igdf.query(f'instrument_group_name == "{igname}"')
+                if sigdf.shape[0] == 0:
+                    ignames = igdf['instrument_group_name'].unique()
+                    raise KeyError(f'igname not in {ignames}; got {igname}')
+                igids = sigdf.index.values
+                igid = igids[0]
+                if sigdf.shape[0] > 1:
+                    warn(f'igname is not unique {igids}; defaulting to {igid}')
 
         cldf = self._get_meta(
             f'data/calendar?instrument_group={igid}'
@@ -199,7 +257,7 @@ class TOLNetAPI:
             If False (default), use cached files in cache folder.
             If True, remake all files
         product_type : int
-            Currently only supports 4
+            Currently supports 4, 5 and 6 (all same)
 
         Returns
         -------
@@ -221,13 +279,26 @@ class TOLNetAPI:
             ds = self.get_product_type4(**opts)
         elif product_type == 5:
             ds = self.get_product_type5(**opts)
+        elif product_type == 6:
+            ds = self.get_product_type6(**opts)
         else:
             raise IOError(f'Only supports product_type=4, got {product_type}')
         return ds
 
+    def get_product_type6(self, id, cache=None, overwrite=False):
+        """
+        Product type 6 has the same format as 4, so this is a thin wrapper.
+
+        Same as to_dataset(..., product_type=5)
+        """
+        opts = dict(id=id, cache=cache, overwrite=overwrite)
+        return self.get_product_type4(**opts)
+
     def get_product_type5(self, id, cache=None, overwrite=False):
         """
         Product type 5 has the same format as 4, so this is a thin wrapper.
+
+        Same as to_dataset(..., product_type=5)
         """
         opts = dict(id=id, cache=cache, overwrite=overwrite)
         return self.get_product_type4(**opts)
@@ -235,6 +306,7 @@ class TOLNetAPI:
     def get_product_type4(self, id, cache=None, overwrite=False):
         """
         Acquire data from product_type=4 and return it as an xarray.Dataset
+        Same as to_dataset(..., product_type=4)
 
         Arguments
         ---------

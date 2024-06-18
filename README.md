@@ -2,6 +2,14 @@
 
 Python utilities for reading and plotting TOLNet data.
 
+[TOLNet](https://tolnet.larc.nasa.gov/) data provides information on the
+vertical evolution of ozone at sites around the country. The recent API makes
+accessing the data easier, and this utility provides an interface for the API
+to connect TOLNet to [xarray](https://xarray.pydata.org/) and
+[pandas](https://pandas.pydata.org/). This simplifies comparison of TOLNet to
+other datasets.
+
+
 To Install:
     python -m pip install --user git+https://github.com/barronh/pytolnet.git
 
@@ -35,5 +43,8 @@ Example:
     # std                              NaN       4.29549      13.209246
     
     # Make a curtain plot
-    qm = ds['derived_ozone'].T.plot()
-    qm.figure.savefig('test.png')
+    qm = ds['derived_ozone'].T.plot(figsize=(12, 4))
+    qm.figure.savefig('pytolnet.png')
+
+
+[Output](pytolnet.png)

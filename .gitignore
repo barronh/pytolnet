@@ -9,6 +9,9 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+examples/*.nc
+examples/*.gz
+examples/*.png
 develop-eggs/
 dist/
 downloads/

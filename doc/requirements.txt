@@ -1,11 +1,12 @@
 ipython
 notebook
 requests
-numpy
+numpy~=1.19
 matplotlib
 pandas
 xarray
 netcdf4
+pyrsig
 sphinx==7.0.1
 sphinx-rtd-theme
 sphinx-gallery<=0.13

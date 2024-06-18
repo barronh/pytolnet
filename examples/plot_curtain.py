@@ -2,7 +2,7 @@
 TOLNet Ozone Curtain Plot
 =========================
 
-This example shows how to aquire TOLNet data from UAH and make a curtain plot."""
+This example shows how to acquire TOLNet data from UAH and make a curtain plot."""
 
 # %%
 # Initialize API and Find Data
