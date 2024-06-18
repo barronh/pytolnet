@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pytolnet package &mdash; pytolnet 9.9.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pytolnet.tests package" href="pytolnet.tests.html" />
+    <link rel="prev" title="TOLNet Ozone Curtain Plot" href="../auto_examples/plot_curtain.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pytolnet
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">pytolnet User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">pytolnet Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pytolnet package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pytolnet.tests.html">pytolnet.tests package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pytolnet">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tolnet-api">TOLNet API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#to-install">To Install</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pytolnet.TOLNetAPI"><code class="docutils literal notranslate"><span class="pre">TOLNetAPI</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pytolnet.TOLNetAPI.data_calendar"><code class="docutils literal notranslate"><span class="pre">TOLNetAPI.data_calendar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pytolnet.TOLNetAPI.file_types"><code class="docutils literal notranslate"><span class="pre">TOLNetAPI.file_types()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pytolnet.TOLNetAPI.get_product_type4"><code class="docutils literal notranslate"><span class="pre">TOLNetAPI.get_product_type4()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pytolnet.TOLNetAPI.get_product_type5"><code class="docutils literal notranslate"><span class="pre">TOLNetAPI.get_product_type5()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pytolnet.TOLNetAPI.get_product_type6"><code class="docutils literal notranslate"><span class="pre">TOLNetAPI.get_product_type6()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pytolnet.TOLNetAPI.instruments_groups"><code class="docutils literal notranslate"><span class="pre">TOLNetAPI.instruments_groups()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pytolnet.TOLNetAPI.processing_types"><code class="docutils literal notranslate"><span class="pre">TOLNetAPI.processing_types()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pytolnet.TOLNetAPI.product_types"><code class="docutils literal notranslate"><span class="pre">TOLNetAPI.product_types()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pytolnet.TOLNetAPI.set_token"><code class="docutils literal notranslate"><span class="pre">TOLNetAPI.set_token()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pytolnet.TOLNetAPI.to_dataset"><code class="docutils literal notranslate"><span class="pre">TOLNetAPI.to_dataset()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">pytolnet</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pytolnet</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pytolnet package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/pytolnet.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pytolnet-package">
+<h1>pytolnet package<a class="headerlink" href="#pytolnet-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pytolnet.tests.html">pytolnet.tests package</a></li>
+</ul>
+</div>
+</section>
+<section id="module-pytolnet">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pytolnet" title="Permalink to this heading"></a></h2>
+<section id="tolnet-api">
+<h3>TOLNet API<a class="headerlink" href="#tolnet-api" title="Permalink to this heading"></a></h3>
+<p>Utilities for retrieving and plotting TOLNet data.</p>
+<section id="to-install">
+<h4>To Install<a class="headerlink" href="#to-install" title="Permalink to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>git+https://github.com/barronh/pytolnet.git
+</pre></div>
+</div>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pytolnet</span>
+<span class="n">api</span> <span class="o">=</span> <span class="n">pytolnet</span><span class="o">.</span><span class="n">TOLNetAPI</span><span class="p">()</span>
+<span class="n">cldf</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">data_calendar</span><span class="p">(</span><span class="s1">&#39;UAH&#39;</span><span class="p">)</span>
+<span class="n">newest_data_id</span> <span class="o">=</span> <span class="n">cldf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">(</span><span class="n">newest_data_id</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+<span class="c1">#                                 time      altitude  derived_ozone</span>
+<span class="c1"># count                         174096  174096.00000   63538.000000</span>
+<span class="c1"># mean   2023-08-16 19:17:36.874643968       7.72500      48.525455</span>
+<span class="c1"># min              2023-08-16 13:06:59       0.30000       0.015444</span>
+<span class="c1"># 25%              2023-08-16 16:10:39       4.01250      40.799999</span>
+<span class="c1"># 50%              2023-08-16 19:18:37       7.72500      47.500000</span>
+<span class="c1"># 75%              2023-08-16 22:24:22      11.43750      55.299999</span>
+<span class="c1"># max              2023-08-17 01:31:57      15.15000     100.000000</span>
+<span class="c1"># std                              NaN       4.29549      13.209246</span>
+</pre></div>
+</div>
+</section>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="pytolnet.TOLNetAPI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pytolnet.</span></span><span class="sig-name descname"><span class="pre">TOLNetAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'anonymous'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'https://tolnet.larc.nasa.gov/api'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pytolnet.html#TOLNetAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytolnet.TOLNetAPI" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pytolnet.TOLNetAPI.data_calendar">
+<span class="sig-name descname"><span class="pre">data_calendar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">igname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">igid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'4'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processing_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1,2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pytolnet.html#TOLNetAPI.data_calendar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytolnet.TOLNetAPI.data_calendar" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve a data calendar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>igname</strong> (<em>str</em><em> or </em><em>None</em>) – Instruments Group name (see instruments_group)</p></li>
+<li><p><strong>igid</strong> (<em>int</em><em> or </em><em>None</em>) – Instruments Group id (see instruments_group); supersedes igname.
+If igname and igid are None, returns calendar from all instruments</p></li>
+<li><p><strong>product_type</strong> (<em>int</em><em> or </em><em>str</em>) – Defaults to 4 (HIRES), which is the supported data to be read.
+Other formats (5=CALVAL; 6=CLIM) are not tested. Remaining formats
+(7=gridded; 8=legacy) not likely to work.</p></li>
+<li><p><strong>processing_type</strong> (<em>int</em><em> or </em><em>str</em>) – Defaults to ‘1,2’ (central,inhouse). Unprocessed (3) is not yet
+supported.</p></li>
+<li><p><strong>file_type</strong> (<em>int</em><em> or </em><em>str</em>) – Defaults to ‘1’ (HDF GEOMS). See file_types for other options.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>caldf</strong> – DataFrame of data by date</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pytolnet</span>
+<span class="n">api</span> <span class="o">=</span> <span class="n">pytolnet</span><span class="o">.</span><span class="n">TOLNetAPI</span><span class="p">()</span>
+<span class="n">cldf</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">data_calendar</span><span class="p">(</span><span class="s1">&#39;UAH&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cldf</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="c1"># &#39;start_data_date&#39;, &#39;public&#39;, &#39;near_real_time&#39;, &#39;isAccessible&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pytolnet.TOLNetAPI.file_types">
+<span class="sig-name descname"><span class="pre">file_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pytolnet.html#TOLNetAPI.file_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytolnet.TOLNetAPI.file_types" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fldf</strong> – File types dataframe</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pytolnet.TOLNetAPI.get_product_type4">
+<span class="sig-name descname"><span class="pre">get_product_type4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pytolnet.html#TOLNetAPI.get_product_type4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytolnet.TOLNetAPI.get_product_type4" title="Permalink to this definition"></a></dt>
+<dd><p>Acquire data from product_type=4 and return it as an xarray.Dataset
+Same as to_dataset(…, product_type=4)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – Must come from data with product_type=4</p></li>
+<li><p><strong>cache</strong> (<em>str</em>) – Path to keep cahed files</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – If False (default), use cached files in cache folder.
+If True, remake all files</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ds</strong> – Dataset for file requested</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.Dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pytolnet.TOLNetAPI.get_product_type5">
+<span class="sig-name descname"><span class="pre">get_product_type5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pytolnet.html#TOLNetAPI.get_product_type5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytolnet.TOLNetAPI.get_product_type5" title="Permalink to this definition"></a></dt>
+<dd><p>Product type 5 has the same format as 4, so this is a thin wrapper.</p>
+<p>Same as to_dataset(…, product_type=5)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pytolnet.TOLNetAPI.get_product_type6">
+<span class="sig-name descname"><span class="pre">get_product_type6</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pytolnet.html#TOLNetAPI.get_product_type6"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytolnet.TOLNetAPI.get_product_type6" title="Permalink to this definition"></a></dt>
+<dd><p>Product type 6 has the same format as 4, so this is a thin wrapper.</p>
+<p>Same as to_dataset(…, product_type=5)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pytolnet.TOLNetAPI.instruments_groups">
+<span class="sig-name descname"><span class="pre">instruments_groups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pytolnet.html#TOLNetAPI.instruments_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytolnet.TOLNetAPI.instruments_groups" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>igdf</strong> – Instrument groups dataframe</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pytolnet.TOLNetAPI.processing_types">
+<span class="sig-name descname"><span class="pre">processing_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pytolnet.html#TOLNetAPI.processing_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytolnet.TOLNetAPI.processing_types" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ptdf</strong> – Processing types dataframe</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pytolnet.TOLNetAPI.product_types">
+<span class="sig-name descname"><span class="pre">product_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pytolnet.html#TOLNetAPI.product_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytolnet.TOLNetAPI.product_types" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prdf</strong> – Product types dataframe</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pytolnet.TOLNetAPI.set_token">
+<span class="sig-name descname"><span class="pre">set_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pytolnet.html#TOLNetAPI.set_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytolnet.TOLNetAPI.set_token" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>token</strong> (<em>str</em>) – Token to use for access. Use ‘anonymous’ if you don’t have one.
+Use None if you want to be prompted</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pytolnet.TOLNetAPI.to_dataset">
+<span class="sig-name descname"><span class="pre">to_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">product_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pytolnet.html#TOLNetAPI.to_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pytolnet.TOLNetAPI.to_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Acquire data from product_type and return it as an xarray.Dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – Must come from data with product_type=4</p></li>
+<li><p><strong>cache</strong> (<em>str</em>) – Path to keep cahed files</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – If False (default), use cached files in cache folder.
+If True, remake all files</p></li>
+<li><p><strong>product_type</strong> (<em>int</em>) – Currently supports 4, 5 and 6 (all same)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ds</strong> – Dataset for file requested</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.Dataset</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pytolnet</span>
+<span class="n">api</span> <span class="o">=</span> <span class="n">pytolnet</span><span class="o">.</span><span class="n">TOLNetAPI</span><span class="p">()</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">(</span><span class="mi">2115</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../auto_examples/plot_curtain.html" class="btn btn-neutral float-left" title="TOLNet Ozone Curtain Plot" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pytolnet.tests.html" class="btn btn-neutral float-right" title="pytolnet.tests package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Barron H. Henderson.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+
+:orphan:
+
+.. _sphx_glr_auto_examples_sg_execution_times:
+
+
+Computation times
+=================
+**00:17.694** total execution time for **auto_examples** files:
+
++-------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_auto_examples_plot_cmaq_compare.py` (``plot_cmaq_compare.py``) | 00:14.042 | 0.0 MB |
++-------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_auto_examples_plot_curtain.py` (``plot_curtain.py``)           | 00:03.652 | 0.0 MB |
++-------------------------------------------------------------------------------+-----------+--------+
