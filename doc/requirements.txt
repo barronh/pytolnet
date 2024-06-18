@@ -6,6 +6,7 @@ matplotlib
 pandas
 xarray
 netcdf4
+pyproj
 pyrsig
 sphinx==7.0.1
 sphinx-rtd-theme
