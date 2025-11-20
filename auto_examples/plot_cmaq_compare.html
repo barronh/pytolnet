@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>TOLNet Ozone CMAQ Comparison Plot &#8212; pytolnet 9.9.9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <script src="../_static/documentation_options.js?v=c5657709"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="TOLNet Ozone Curtain Plot" href="plot_curtain.html" />
+    <link rel="prev" title="pytolnet Examples" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-plot-cmaq-compare-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="tolnet-ozone-cmaq-comparison-plot">
+<span id="sphx-glr-auto-examples-plot-cmaq-compare-py"></span><h1>TOLNet Ozone CMAQ Comparison Plot<a class="headerlink" href="#tolnet-ozone-cmaq-comparison-plot" title="Link to this heading">¶</a></h1>
+<p>This example shows how to compare TOLNet to CMAQ by interpolating CMAQ to the.
+TOLNet grid. It uses NASA LaRC data during FIREX-AQ as an example with EQUATES
+CMAQ from pyrsig. You can adapt the example to use your CMAQ on local disk.</p>
+<section id="install-pytolnet-if-not-avail">
+<h2>Install pytolnet if not avail<a class="headerlink" href="#install-pytolnet-if-not-avail" title="Link to this heading">¶</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># !python -m pip install git+https://github.com/barronh/pytolnet.git</span>
+</pre></div>
+</div>
+</section>
+<section id="initialize-api-and-find-data">
+<h2>Initialize API and Find Data<a class="headerlink" href="#initialize-api-and-find-data" title="Link to this heading">¶</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pytolnet</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyrsig</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyproj</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+
+<span class="n">api</span> <span class="o">=</span> <span class="n">pytolnet</span><span class="o">.</span><span class="n">TOLNetAPI</span><span class="p">()</span>
+
+<span class="c1"># Find newest data from UAH</span>
+<span class="n">cldf</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">data_calendar</span><span class="p">(</span><span class="s1">&#39;NASA LaRC&#39;</span><span class="p">)</span>
+<span class="n">daysdf</span> <span class="o">=</span> <span class="n">cldf</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+    <span class="s1">&#39;start_date &gt;= &quot;2019-09-09 00:00:00&quot;&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39; and start_date &lt; &quot;2019-09-13 00:00:00&quot;&#39;</span>
+    <span class="o">+</span> <span class="s1">&#39; and regular_id == regular_id&#39;</span>  <span class="c1"># don&#39;t return missing</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieve-tolnet-data">
+<h2>Retrieve TOLNet Data<a class="headerlink" href="#retrieve-tolnet-data" title="Link to this heading">¶</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">tdss</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">daysdf</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">tdss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;regular_id&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieve-cmaq-data">
+<h2>Retrieve CMAQ Data<a class="headerlink" href="#retrieve-cmaq-data" title="Link to this heading">¶</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">ilat</span> <span class="o">=</span> <span class="n">tdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">instrument_latitude</span>   <span class="c1"># Use first file for</span>
+<span class="n">ilon</span> <span class="o">=</span> <span class="n">tdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">instrument_longitude</span>  <span class="c1"># instrument location</span>
+<span class="n">bbox</span> <span class="o">=</span> <span class="p">(</span><span class="n">ilon</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">ilat</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">ilon</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">ilat</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="n">rsig</span> <span class="o">=</span> <span class="n">pyrsig</span><span class="o">.</span><span class="n">RsigApi</span><span class="p">(</span><span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">)</span>
+<span class="n">qdss</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">daysdf</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">bdate</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;start_date&#39;</span><span class="p">])</span>
+    <span class="c1"># Use RSIG to get EQUATES Simulations for comparison</span>
+    <span class="n">qds</span> <span class="o">=</span> <span class="n">rsig</span><span class="o">.</span><span class="n">to_ioapi</span><span class="p">(</span><span class="s1">&#39;cmaq.equates.conus.conc.O3&#39;</span><span class="p">,</span> <span class="n">bdate</span><span class="o">=</span><span class="n">bdate</span><span class="p">)</span>
+    <span class="n">zds</span> <span class="o">=</span> <span class="n">rsig</span><span class="o">.</span><span class="n">to_ioapi</span><span class="p">(</span><span class="s1">&#39;cmaq.equates.conus.conc.ZH&#39;</span><span class="p">,</span> <span class="n">bdate</span><span class="o">=</span><span class="n">bdate</span><span class="p">)</span>
+    <span class="n">qds</span><span class="p">[</span><span class="s1">&#39;ZH_ASL_MID_KM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">zds</span><span class="p">[</span><span class="s1">&#39;ZH&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">qds</span><span class="p">[</span><span class="s1">&#39;ELEVATION&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.</span>
+    <span class="c1"># Optional, use local data instead of pyrsig</span>
+    <span class="c1"># qds = pyrsig.open_ioapi(f&#39;./CCTM_CONC_{bdate:%Y%m%d}&#39;)</span>
+    <span class="c1"># zds = pyrsig.open_ioapi(f&#39;./METCRO3D_{bdate:%Y%m%d}&#39;)</span>
+    <span class="c1"># gds = pyrsig.open_ioapi(f&#39;./GRIDCRO3D_{bdate:%Y%m%d}&#39;)</span>
+    <span class="c1"># qds[&#39;ZH_ASL_MID_KM&#39;] = (zds[&#39;ZH&#39;] + gds[&#39;HT&#39;]) / 1000.</span>
+    <span class="n">qdss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qds</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="interpolate-cmaq-to-tolnet">
+<h2>Interpolate CMAQ to TOLNet<a class="headerlink" href="#interpolate-cmaq-to-tolnet" title="Link to this heading">¶</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">qproj</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="n">qdss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">crs_proj4</span><span class="p">)</span>  <span class="c1"># Use first CMAQ for projection info</span>
+<span class="n">ix</span><span class="p">,</span> <span class="n">iy</span> <span class="o">=</span> <span class="n">qproj</span><span class="p">(</span><span class="n">ilon</span><span class="p">,</span> <span class="n">ilat</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">qds</span><span class="p">,</span> <span class="n">tds</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">qdss</span><span class="p">,</span> <span class="n">tdss</span><span class="p">):</span>
+    <span class="c1"># Make a placeholder for interpolated data</span>
+    <span class="n">tds</span><span class="p">[</span><span class="s1">&#39;CMAQ_O3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tds</span><span class="p">[</span><span class="s1">&#39;derived_ozone&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">tds</span><span class="p">[</span><span class="s1">&#39;CMAQ_O3&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="s1">&#39;ppbv&#39;</span><span class="p">,</span> <span class="n">long_name</span><span class="o">=</span><span class="s1">&#39;CMAQ&#39;</span><span class="p">)</span>
+    <span class="c1"># Find nearest grid cell and interpolate time</span>
+    <span class="n">tsmatch</span> <span class="o">=</span> <span class="n">qds</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span>
+        <span class="n">ROW</span><span class="o">=</span><span class="n">iy</span><span class="p">,</span> <span class="n">COL</span><span class="o">=</span><span class="n">ix</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">TSTEP</span><span class="o">=</span><span class="n">tds</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">])</span>
+    <span class="c1"># For each time-step, interpolate from ZH coordinate to altitude</span>
+    <span class="k">for</span> <span class="n">ti</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tsmatch</span><span class="o">.</span><span class="n">time</span><span class="p">):</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">tsmatch</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+        <span class="c1"># Interpolate along altitude in meters above sea level</span>
+        <span class="n">tds</span><span class="p">[</span><span class="s1">&#39;CMAQ_O3&#39;</span><span class="p">][</span><span class="n">ti</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">tds</span><span class="o">.</span><span class="n">altitude</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">ZH_ASL_MID_KM</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">O3</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="plot-a-day">
+<h2>Plot a Day<a class="headerlink" href="#plot-a-day" title="Link to this heading">¶</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">norm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span>
+<span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;viridis&#39;</span>
+<span class="n">dlevels</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">35</span><span class="p">,</span> <span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">35</span><span class="p">]</span>
+<span class="n">dcmap</span> <span class="o">=</span> <span class="s1">&#39;seismic&#39;</span>
+<span class="n">gskw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">tds</span> <span class="ow">in</span> <span class="n">tdss</span><span class="p">:</span>
+    <span class="n">sdate</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">tds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;start_data_date&#39;</span><span class="p">])</span>
+    <span class="n">edate</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">tds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;end_data_date&#39;</span><span class="p">])</span>
+    <span class="n">loc</span> <span class="o">=</span> <span class="n">tds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;DATA_LOCATION&#39;</span><span class="p">]</span>
+    <span class="n">tds</span> <span class="o">=</span> <span class="n">tds</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">tds</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="s1">&#39;1h&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">Z1</span> <span class="o">=</span> <span class="n">tds</span><span class="o">.</span><span class="n">derived_ozone</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="mi">1</span>
+    <span class="n">Z1</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">long_name</span><span class="o">=</span><span class="s1">&#39;TOLNet&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ppbv&#39;</span><span class="p">)</span>
+    <span class="n">Z2</span> <span class="o">=</span> <span class="n">tds</span><span class="o">.</span><span class="n">CMAQ_O3</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">Z1</span><span class="o">.</span><span class="n">isnull</span><span class="p">())</span>
+    <span class="n">dZ</span> <span class="o">=</span> <span class="n">Z2</span> <span class="o">-</span> <span class="n">Z1</span>
+    <span class="n">dZ</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">long_name</span><span class="o">=</span><span class="s1">&#39;CMAQ - TOLNet&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ppbv&#39;</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axx</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+        <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="n">gskw</span>
+    <span class="p">)</span>
+    <span class="n">qm</span> <span class="o">=</span> <span class="n">Z1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">Z2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">dZ</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axx</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">levels</span><span class="o">=</span><span class="n">dlevels</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">dcmap</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+    <span class="n">axx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="n">sdate</span><span class="p">,</span> <span class="n">edate</span><span class="p">))</span>  <span class="c1"># show only hours with valid TOLNet data</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">axx</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;gainsboro&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;time [UTC]&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;EQUATES_TOLNet_</span><span class="si">{</span><span class="n">loc</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">sdate</span><span class="si">:</span><span class="s1">%Y-%m-%d</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_plot_cmaq_compare_001.png" srcset="../_images/sphx_glr_plot_cmaq_compare_001.png" alt="LANGLEY.RESEARCH.CENTER.VA" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_plot_cmaq_compare_002.png" srcset="../_images/sphx_glr_plot_cmaq_compare_002.png" alt="LANGLEY.RESEARCH.CENTER.VA" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_plot_cmaq_compare_003.png" srcset="../_images/sphx_glr_plot_cmaq_compare_003.png" alt="LANGLEY.RESEARCH.CENTER.VA" class = "sphx-glr-multi-img"/></li>
+</ul>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 24.382 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-cmaq-compare-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/06f892947e9d9ef4265a8ce054ed59a2/plot_cmaq_compare.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_cmaq_compare.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/c4f0ca131552abb88d0b9a01057c26a5/plot_cmaq_compare.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_cmaq_compare.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/d4bdcd0d68ad3f51c28e718ef7709615/plot_cmaq_compare.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_cmaq_compare.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pytolnet</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">pytolnet User’s Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">pytolnet Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">TOLNet Ozone CMAQ Comparison Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_curtain.html">TOLNet Ozone Curtain Plot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/pytolnet.html">pytolnet package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">pytolnet</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">pytolnet Examples</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">pytolnet Examples</a></li>
+      <li>Next: <a href="plot_curtain.html" title="next chapter">TOLNet Ozone Curtain Plot</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Barron H. Henderson.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/auto_examples/plot_cmaq_compare.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

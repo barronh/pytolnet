@@ -1,0 +1,21 @@
+pytolnet.tests package
+======================
+
+Submodules
+----------
+
+pytolnet.tests.test\_core module
+--------------------------------
+
+.. automodule:: pytolnet.tests.test_core
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: pytolnet.tests
+   :members:
+   :show-inheritance:
+   :undoc-members:
