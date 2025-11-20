@@ -29,8 +29,9 @@ api = pytolnet.TOLNetAPI()
 # Find newest data from UAH
 cldf = api.data_calendar('NASA LaRC')
 daysdf = cldf.query(
-    'start_data_date >= "2019-09-09 00:00:00"'
-    + ' and start_data_date < "2019-09-13 00:00:00"'
+    'start_date >= "2019-09-09 00:00:00"'
+    + ' and start_date < "2019-09-13 00:00:00"'
+    + ' and regular_id == regular_id'  # don't return missing
 )
 
 # %%
@@ -39,7 +40,7 @@ daysdf = cldf.query(
 
 tdss = []
 for id, row in daysdf.iterrows():
-    tdss.append(api.to_dataset(id))
+    tdss.append(api.to_dataset(row['regular_id']))
 
 
 # %%
@@ -52,7 +53,7 @@ bbox = (ilon - 0.1, ilat - 0.1, ilon + 0.1, ilat + 0.1)
 rsig = pyrsig.RsigApi(bbox=bbox)
 qdss = []
 for id, row in daysdf.iterrows():
-    bdate = pd.to_datetime(row['start_data_date'])
+    bdate = pd.to_datetime(row['start_date'])
     # Use RSIG to get EQUATES Simulations for comparison
     qds = rsig.to_ioapi('cmaq.equates.conus.conc.O3', bdate=bdate)
     zds = rsig.to_ioapi('cmaq.equates.conus.conc.ZH', bdate=bdate)

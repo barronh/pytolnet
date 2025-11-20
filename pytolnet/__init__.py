@@ -32,9 +32,10 @@ Example
     # max              2023-08-17 01:31:57      15.15000     100.000000
     # std                              NaN       4.29549      13.209246
 """
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 changelog = """
+v0.1.2 : Updated to work with new data/calendar response.
 v0.1.0 : First release. Includes fix for boolean properties.
 """
 
