@@ -34,7 +34,7 @@ def _test_product(igname, product_type):
 
     api = _get_api()
     cldf = api.data_calendar(igname, product_type=product_type)
-    newest_data_id = cldf.index.values.max()
+    newest_data_id = cldf['regular_id'].max()
     with tempfile.TemporaryDirectory() as td:
         ds = api.to_dataset(newest_data_id, overwrite=True, cache=td)
         sumdf = ds.to_dataframe().reset_index().describe()

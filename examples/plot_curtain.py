@@ -16,9 +16,9 @@ api = pytolnet.TOLNetAPI()
 # Find newest data from UAH
 cldf = api.data_calendar('UAH')
 # Choose newest?
-data_id = cldf.index.values[0]
+data_id = cldf['regular_id'].max()
 # Choose specific version
-# data_id = 2115
+# data_id = 12607
 
 # %%
 # Retrieve and Characterize Data

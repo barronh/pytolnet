@@ -106,19 +106,23 @@ class TOLNetAPI:
         self._token = token
         self._headers = {"Authorization": f"Bearer {token}"}
 
-    def _get_meta(self, key):
+    def _get_meta(self, key, params=None):
         """
         Simple wrapper to open and return a dataframe
         """
         import pandas as pd
+        if params is None:
+            params = {}
         root = self._root
         headers = self._headers
         s = self._session
-        r = s.get(f'{root}/{key}', headers=headers)
+        r = s.get(f'{root}/{key}', headers=headers, params=params)
         j = r.json()
-        if 'status' in j and 'message' in j and 'id' not in j:
+        if 'status' in j and 'message' in j:
             raise IOError('Status {status}: {message}'.format(**j))
-        df = pd.DataFrame.from_records(j, index='id').sort_index()
+        df = pd.DataFrame.from_records(j)
+        if 'id' in df.columns:
+            df = df.set_index('id').sort_index()
         return df
 
     def instruments_groups(self):
@@ -166,7 +170,7 @@ class TOLNetAPI:
         return self._processing_types_df
 
     def data_calendar(
-        self, igname=None, igid=None, product_type='4', processing_type='1,2',
+        self, igname=None, igid=None, product_type='4', processing_type=None,
         file_type='1', ascending=False
     ):
         """
@@ -236,12 +240,14 @@ class TOLNetAPI:
                 if sigdf.shape[0] > 1:
                     warn(f'igname is not unique {igids}; defaulting to {igid}')
 
-        cldf = self._get_meta(
-            f'data/calendar?instrument_group={igid}'
-            + f'&product_type={product_type}&processing_type={processing_type}'
-            + f'&file_type={file_type}'
+        params = dict(
+            instrument_group=igid, product_type=product_type,
+            file_type=file_type
         )
-        return cldf.sort_values('start_data_date', ascending=ascending)
+        if processing_type is not None:
+            params['processing_type'] = processing_type
+        cldf = self._get_meta('data/calendar', params=params)
+        return cldf.sort_values('start_date', ascending=ascending)
 
     def to_dataset(self, id, cache=None, overwrite=False, product_type=4):
         """
