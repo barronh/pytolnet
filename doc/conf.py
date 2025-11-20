@@ -31,8 +31,6 @@ extensions = [
     'matplotlib.sphinxext.plot_directive',
     'sphinx_copybutton',
     'sphinx_design',
-    'sphinx_rtd_theme',
-    'myst_nb',
     'sphinx_gallery.gen_gallery',
     'sphinx.ext.napoleon',
 ]
@@ -45,7 +43,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'sphinx_rtd_theme'
+# html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 # -- Options for Gallery --
